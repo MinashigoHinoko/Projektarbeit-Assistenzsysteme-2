@@ -21,7 +21,7 @@ ui <- fluidPage(
       # der Slider geht hier von 0 (min) bis 10 (max),
       # die Voreinstellung ist 5 (value)
       sliderInput(inputId = "quality",
-                  label = "Wählen Sie die Qualität (0-10)",
+                  label = "Waehlen Sie die Qualitaet (0-10)",
                   min = 0,
                   max = 10,
                   value = 5
@@ -32,7 +32,7 @@ ui <- fluidPage(
       # die entsprechende Zuordnung mit Zahlen 1, 2 und 3 sind wie im Datensatz,
       # die Voreinstellung ist 1 (selected) - also eine "normale Lage"
       sliderInput(inputId = "density",
-                  label = "Wählen Sie Ihre gewünschte Dichte",
+                  label = "Waehlen Sie Ihre gewuenschte Dichte",
                   min = 0.987110,
                   max = 1.03898,
                   value = 0.99
