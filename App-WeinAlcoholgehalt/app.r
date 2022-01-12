@@ -8,7 +8,7 @@ ui <- fluidPage(
     src = "https://www.bonvinitas.com/images/vinho-verde_Typ_web.jpg"
   ),
   # Titel der App
-  titlePanel(title = span("Qualitaet zu Alkohol ratio",
+  titlePanel(title = span("Alkoholgehalt zu Qualitaet ratio",
                           style = "background-color: white; font-size: 28px; transparent: false")),
 
   # Spalte mit dem Kreis und Schieberegler
@@ -21,20 +21,17 @@ ui <- fluidPage(
       h3("Fuegen Sie Ihre gewuenschten Daten ein:",align="left"),
       hr(style="height: 1px; background: black"),
 
-      # Ein Kreis mit der Möglichkeit die Qualität des Weins zu wählen
+      # Ein Kreis mit der Moeglichkeit die Qualitaet des Weins zu waehlen
       # der Slider geht hier von 0 (min) bis 10 (max),
       # die Voreinstellung ist 5 (value)
-      knobInput(inputId = "quality",
-                  label = "Waehlen Sie die Qualitaet (0-10)",
+      sliderInput(inputId = "alcohol",
+                  label = "Waehlen Sie Ihren gewuenschten Alkoholgehalt (0-15)",
                   min = 0,
-                  max = 10,
-                  value = 5
+                  max = 15.2,
+                  value = 10
       ),
 
       # Die Wein dichte als numerische Eingabe
-      # die Auswahlmoeglichkeiten sind "Rotwein"und "Weisswein",
-      # die entsprechende Zuordnung mit Zahlen 1, 2 und 3 sind wie im Datensatz,
-      # die Voreinstellung ist 1 (selected) - also eine "normale Lage"
       sliderInput(inputId = "density",
                   label = "Waehlen Sie Ihre gewuenschte Dichte",
                   min = 0.987110,
@@ -48,14 +45,14 @@ ui <- fluidPage(
     # der Hauptbereich der Nutzeroberflaeche fuer die Ausgabe der Ergebnisse
     mainPanel(
 
-      # Ausgabe des Histogramms für Rotwein
+      # Ausgabe des Histogramms fuer Rotwein
       plotOutput(outputId = "VerteilungR"),
       
       # Ausgabe der PrognoseR
       htmlOutput("PrognoseR"),
       
       
-      #Ausgabe des zweiten Histogramms für Weißwein
+      #Ausgabe des zweiten Histogramms fuer Weisswein
       plotOutput(outputId = "VerteilungW"),
 
       # Ausgabe der PrognoseW
@@ -80,13 +77,13 @@ server <- function(input, output) {
 
     # Ersetze die erste Zeile im neuen Datensatz nun mit den neuen, eingegebenen Werten
 
-    # zunächst die Werte fuer quality, alcohol und density
-    WeinR.neu[1,"quality"] <- input$quality
+    # zunaechst die Werte fuer quality, alcohol und density
+    WeinR.neu[1,"alcohol"] <- input$alcohol
     WeinR.neu[1,"density"] <- input$density
 
     # Berechne die Prognosen fuer WeinR.neu
     # die Prognose der neuen, eingegebenen Werte stehen im ersten Eintrag des Prognosevektors
-    X.neu <- model.matrix(alcohol ~ quality + density, WeinR.neu)
+    X.neu <- model.matrix(quality ~ alcohol + density, WeinR.neu)
     X.neu <- X.neu[,-1]   # entferne den Intercept
 
     prognosevektor <- predict(modelR,X.neu)$predictions
@@ -95,7 +92,7 @@ server <- function(input, output) {
     # der Prognosewert wird noch auf 2 Stellen hinter dem Komma (digits=2) gerundet.
     prog <- round(prog,digits=2)
 
-    # der errechnete Wert soll als Ergebnis der Funktion zurückgegeben werden
+    # der errechnete Wert soll als Ergebnis der Funktion zurueckgegeben werden
     prog
   })
 
@@ -110,14 +107,14 @@ server <- function(input, output) {
     # und die Daten der Zielvariable in y.
     # Berechne dann die Abweichungen zwischen den Prognosen und den realen Werten
     X <- WeinR[,c("quality","alcohol","density")]
-    X <- model.matrix(alcohol ~ quality + density, WeinR)
+    X <- model.matrix(quality ~ alcohol + density, WeinR)
     X <- X[,-1]   # entferne den Intercept
-    y <- WeinR[,"alcohol"]
+    y <- WeinR[,"quality"]
     abweichungen <- y-predict(modelR,X)$predictions
 
     # Zeichne jetzt im Histogram die Prognose mit den Abweichungen;
-    # dies visualisiert den Gehalt des Alkohols im Rotwein.
-    hist(prog+abweichungen, col = "red", main = "Verteilung des Alkoholgehalt im Rotwein",xlim=c(0,15))
+    # dies visualisiert die Qualitaet des Rotweins mit den gewaehlten werten.
+    hist(prog+abweichungen, col = "red", main = "Verteilung der Qualitaetsstufen im Rotwein",xlim=c(0,10))
 
   })
   
@@ -129,9 +126,12 @@ server <- function(input, output) {
     # der Wert der Prognose aus der Funktion prognose()
     prog <- prognoseR()
     
+    # der Prognosewert wird noch auf 0 Stellen hinter dem Komma (digits=0) gerundet.
+    prog <- round(prog,digits=0)
+    
     # die Ausgabe ist eine Kombination (mit dem Befehl 'paste') von Text
-    # und des errechneten Prognosewerts prog sowie einem Stück HTML für einen farbigen Text
-    Ausgabe <- paste("<font color=\"#FF0000\"><b>","Durchschnittlicher Alkoholgehalt in Rotwein: ", prog, "</b></font>")
+    # und des errechneten Prognosewerts prog sowie einem Stueck HTML fuer einen farbigen Text
+    Ausgabe <- paste("<font color=\"#FF0000\"><b>","Durchschnittliche Qualitaet im Rotwein: ", prog, "</b></font>")
   })
   
   # Folgende Funktion berechnet die Prognose fuer die eingegeben Werte
@@ -142,13 +142,13 @@ server <- function(input, output) {
     
     # Ersetze die erste Zeile im neuen Datensatz nun mit den neuen, eingegebenen Werten
     
-    # zunächst die Werte fuer quality, alcohol und density
-    WeinW.neu[1,"quality"] <- input$quality
+    # zunaechst die Werte fuer quality, alcohol und density
+    WeinW.neu[1,"alcohol"] <- input$alcohol
     WeinW.neu[1,"density"] <- input$density
     
     # Berechne die Prognosen fuer WeinW.neu
     # die Prognose der neuen, eingegebenen Werte stehen im ersten Eintrag des Prognosevektors
-    X.neu <- model.matrix(alcohol ~ quality + density, WeinW.neu)
+    X.neu <- model.matrix(quality ~ alcohol + density, WeinW.neu)
     X.neu <- X.neu[,-1]   # entferne den Intercept
     
     prognosevektor <- predict(modelW,X.neu)$predictions
@@ -172,14 +172,14 @@ server <- function(input, output) {
     # und die Daten der Zielvariable in y.
     # Berechne dann die Abweichungen zwischen den Prognosen und den realen Werten
     X <- WeinW[,c("quality","alcohol","density")]
-    X <- model.matrix(alcohol ~ quality + density, WeinW)
+    X <- model.matrix(quality ~ alcohol + density, WeinW)
     X <- X[,-1]   # entferne den Intercept
-    y <- WeinW[,"alcohol"]
+    y <- WeinW[,"quality"]
     abweichungen <- y-predict(modelW,X)$predictions
     
     # Zeichne jetzt im Histogram die Prognose mit den Abweichungen;
-    # dies visualisiert den Gehalt des Alkohols im Weisswein
-    hist(prog+abweichungen, col = "white", main = "Verteilung des Alkoholgehalt im Weisswein",xlim=c(0,15))
+    # dies visualisiert die Qualitaet des Weissweins mit den gewaehlten werten.
+    hist(prog+abweichungen, col = "white", main = "Verteilung der Qualitaetsstufen im Weisswein",xlim=c(0,10))
     
   })
   
@@ -191,9 +191,12 @@ server <- function(input, output) {
     # der Wert der Prognose aus der Funktion prognose()
     prog <- prognoseW()
     
+    # der Prognosewert wird noch auf 0 Stellen hinter dem Komma (digits=0) gerundet.
+    prog <- round(prog,digits=0)
+    
     # die Ausgabe ist eine Kombination (mit dem Befehl 'paste') von Text
-    # und des errechneten Prognosewerts prog
-    Ausgabe <- paste("<font color=\"#FFFFFF\"><b>","Durchschnittlicher Alkoholgehalt in Weisswein: ", prog, "</b></font>")
+    # und des errechneten Prognosewerts prog sowie einem Stueck HTML fuer einen farbigen Text
+    Ausgabe <- paste("<font color=\"#FFFFFF\"><b>","Durchschnittliche Qualitaet im Weisswein: ", prog, "</b></font>")
   })
 
 }
