@@ -44,6 +44,8 @@ ui <- fluidPage(
     # der Hauptbereich der Nutzeroberflaeche fuer die Ausgabe der Ergebnisse
     mainPanel(
 
+      imageOutput("img.jpg"),
+
       # Ausgabe des Histogramms
       plotOutput(outputId = "VerteilungR"),
       
