@@ -3,24 +3,36 @@ setwd("C:/Users/User/Desktop/Uni/1.Vorlesungen/3.Semester_WS_2021-2022/02.Projek
 WeinR <- read.csv("winequality-red.csv", header=TRUE, sep=";",fill=TRUE)
 WeinW <- read.csv("winequality-white.csv", header=TRUE, sep=";",fill=TRUE)
 
-x <- WeinR[,"quality"]
-y <- WeinR[,"alcohol"]
+Daten <- WeinR
 
-#mean(x)
-#median(x)
-#summary(x)
-#max(x)
-#min(x)
-#sd(x)
-#quantile(x,0.3)
-#IQR(x)
-#quantile(x,0.75)-quantile(x,0.25)
-#hist(x)
+# Berechnung des neuronalen Netzes
 
-print(model)
+  # Laden des R-Pakets
+  library(ANN2)
 
-a <- data.frame(x=c(5,5,5,6,6,6,7,7,7,8,8,8,9,9,9,10,10,10))
-model <- lm(x ~ y)
-result <- predict(model,newdata = a, interval = 'confidence')
-plot(y,x,col = "blue",main ="Qualität & Alcohol Regression", abline(lm(x ~ y)),cex=1.3,pch=16,xlab="Alcohol gehalt",ylab="Quality(0-10)")
+  # Erstellen eines Datensatzes mit Dummy-Codierung der kategoriellen Variablen
+  X <- model.matrix(alcohol ~ quality + density, Daten)
+  X <- X[,-1]   # entferne den Intercept
+
+  y <- Daten[,"alcohol"]
+# Trainieren des neuronalen Netzes
+# mit 2 Hidden Layer, wobei der 1. Hidden Layer 4 Hidden Units hat und
+# der 2. Hidden Layer 3 Units hat
+
+model <- neuralnetwork(X, y, hidden.layers=c(4,3), regression = TRUE,
+                       loss.type = "absolute", learn.rates = 1e-04,n.epochs = 100,
+                       verbose=FALSE)
+# Starten der Shiny-App
+
+library(shiny)
+
+runApp("App-WeinAlcoholgehalt")
+
+
+
+
+#a <- data.frame(x=c(5,5,5,6,6,6,7,7,7,8,8,8,9,9,9,10,10,10))
+#model <- lm(x ~ y)
+#result <- predict(model,newdata = a, interval = 'confidence')
+#plot(y,x,col = "blue",main ="Qualität & Alcohol Regression", abline(lm(x ~ y)),cex=1.3,pch=16,xlab="Alcohol gehalt",ylab="Quality(0-10)")
 
