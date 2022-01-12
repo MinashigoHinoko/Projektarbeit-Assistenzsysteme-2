@@ -3,7 +3,11 @@
 ################
 # Im folgenden Abschnitt wird das User Interface (UI) definiert
 ui <- fluidPage(
-
+  setBackgroundImage(
+    
+    src = "https://www.bonvinitas.com/images/vinho-verde_Typ_web.jpg"
+    
+  ),
   # Titel der App
   titlePanel("Qualitaet zu alcohol ratio"),
 
@@ -44,19 +48,19 @@ ui <- fluidPage(
     # der Hauptbereich der Nutzeroberflaeche fuer die Ausgabe der Ergebnisse
     mainPanel(
 
-      imageOutput("img.jpg"),
-
       # Ausgabe des Histogramms
       plotOutput(outputId = "VerteilungR"),
       
       # Ausgabe der PrognoseR
       textOutput("PrognoseR"),
       
+      
       #Ausgabe des zweiten Histogramms
       plotOutput(outputId = "VerteilungW"),
 
       # Ausgabe der PrognoseW
       textOutput("PrognoseW"),
+      
 
     )
   )

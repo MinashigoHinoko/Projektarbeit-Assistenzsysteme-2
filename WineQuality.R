@@ -35,6 +35,7 @@ modelW <- neuralnetwork(X, y, hidden.layers=c(4,3), regression = TRUE,
 # Starten der Shiny-App
 
 library(shiny)
+library(shinyWidgets)
 
 runApp("App-WeinAlcoholgehalt")
 
