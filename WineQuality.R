@@ -9,10 +9,10 @@ WeinW <- read.csv("winequality-white.csv", header=TRUE, sep=";",fill=TRUE)
   library(ANN2)
 
   # Erstellen eines Datensatzes mit Dummy-Codierung der kategoriellen Variablen
-  X <- model.matrix(alcohol ~ quality + density, WeinR)
+  X <- model.matrix(quality ~ alcohol + density, WeinR)
   X <- X[,-1]   # entferne den Intercept
 
-  y <- WeinR[,"alcohol"]
+  y <- WeinR[,"quality"]
 # Trainieren des neuronalen Netzes
 # mit 2 Hidden Layer, wobei der 1. Hidden Layer 4 Hidden Units hat und
 # der 2. Hidden Layer 3 Units hat
@@ -21,10 +21,10 @@ modelR <- neuralnetwork(X, y, hidden.layers=c(4,3), regression = TRUE,
                        loss.type = "absolute", learn.rates = 1e-04,n.epochs = 100,
                        verbose=FALSE)
 # Erstellen eines Datensatzes mit Dummy-Codierung der kategoriellen Variablen
-X <- model.matrix(alcohol ~ quality + density, WeinW)
+X <- model.matrix(quality ~ alcohol + density, WeinW)
 X <- X[,-1]   # entferne den Intercept
 
-y <- WeinW[,"alcohol"]
+y <- WeinW[,"quality"]
 # Trainieren des neuronalen Netzes
 # mit 2 Hidden Layer, wobei der 1. Hidden Layer 4 Hidden Units hat und
 # der 2. Hidden Layer 3 Units hat
