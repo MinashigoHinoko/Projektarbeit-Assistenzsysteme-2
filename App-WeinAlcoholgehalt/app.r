@@ -8,6 +8,15 @@ ui <- fluidPage(
     src = "https://www.bonvinitas.com/images/vinho-verde_Typ_web.jpg"
     
   ),
+
+ui=bootstrapPage(
+  tags$head(tags$style("#text1{color: red;
+                                 font-size: 20px;
+                                 font-style: italic;
+                                 }"
+  )
+  )
+),
   # Titel der App
   titlePanel("Qualitaet zu alcohol ratio"),
 
@@ -52,14 +61,14 @@ ui <- fluidPage(
       plotOutput(outputId = "VerteilungR"),
       
       # Ausgabe der PrognoseR
-      textOutput("PrognoseR"),
+      htmlOutput("PrognoseR"),
       
       
       #Ausgabe des zweiten Histogramms
       plotOutput(outputId = "VerteilungW"),
 
       # Ausgabe der PrognoseW
-      textOutput("PrognoseW"),
+      htmlOutput("PrognoseW"),
       
 
     )
@@ -193,7 +202,7 @@ server <- function(input, output) {
     
     # die Ausgabe ist eine Kombination (mit dem Befehl 'paste') von Text
     # und des errechneten Prognosewerts prog
-    Ausgabe <- paste("Durchschnittlicher Alkohol gehalt in Weisswein: ", prog)
+    Ausgabe <- paste("<font color=\"#FF0000\"><b>","Durchschnittlicher Alkohol gehalt in Weisswein: ", prog, "</b></font>")
   })
 
 }
