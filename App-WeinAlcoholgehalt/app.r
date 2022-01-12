@@ -1,18 +1,17 @@
 
 
 ################
-# Im folgenden Abschnitt wird das User Interface (UI) definiert
+# UI mithilfe von fluidPage
 ui <- fluidPage(
+   # Hintergrund
   setBackgroundImage(
-    
     src = "https://www.bonvinitas.com/images/vinho-verde_Typ_web.jpg"
-    
   ),
   # Titel der App
   titlePanel(title = span("Qualitaet zu Alkohol ratio",
                           style = "background-color: white; font-size: 28px; transparent: false")),
 
-  # Layout fuer die Eingaben in die App und die Ausgaben
+  # Spalte mit dem Kreis und Schieberegler
   sidebarLayout(
 
     # Die Definition der Eingabefelder auf der linken Seite
@@ -22,7 +21,7 @@ ui <- fluidPage(
       h3("Fuegen Sie Ihre gewuenschten Daten ein:",align="left"),
       hr(style="height: 1px; background: black"),
 
-      # Ein Slider fuerr die Qualitaet des Weins
+      # Ein Kreis mit der Möglichkeit die Qualität des Weins zu wählen
       # der Slider geht hier von 0 (min) bis 10 (max),
       # die Voreinstellung ist 5 (value)
       knobInput(inputId = "quality",
@@ -49,14 +48,14 @@ ui <- fluidPage(
     # der Hauptbereich der Nutzeroberflaeche fuer die Ausgabe der Ergebnisse
     mainPanel(
 
-      # Ausgabe des Histogramms
+      # Ausgabe des Histogramms für Rotwein
       plotOutput(outputId = "VerteilungR"),
       
       # Ausgabe der PrognoseR
       htmlOutput("PrognoseR"),
       
       
-      #Ausgabe des zweiten Histogramms
+      #Ausgabe des zweiten Histogramms für Weißwein
       plotOutput(outputId = "VerteilungW"),
 
       # Ausgabe der PrognoseW
@@ -131,7 +130,7 @@ server <- function(input, output) {
     prog <- prognoseR()
     
     # die Ausgabe ist eine Kombination (mit dem Befehl 'paste') von Text
-    # und des errechneten Prognosewerts prog
+    # und des errechneten Prognosewerts prog sowie einem Stück HTML für einen farbigen Text
     Ausgabe <- paste("<font color=\"#FF0000\"><b>","Durchschnittlicher Alkoholgehalt in Rotwein: ", prog, "</b></font>")
   })
   
