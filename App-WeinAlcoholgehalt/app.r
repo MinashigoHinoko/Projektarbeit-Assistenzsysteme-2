@@ -8,17 +8,9 @@ ui <- fluidPage(
     src = "https://www.bonvinitas.com/images/vinho-verde_Typ_web.jpg"
     
   ),
-
-ui=bootstrapPage(
-  tags$head(tags$style("#text1{color: red;
-                                 font-size: 20px;
-                                 font-style: italic;
-                                 }"
-  )
-  )
-),
   # Titel der App
-  titlePanel("Qualitaet zu alcohol ratio"),
+  titlePanel(title = span("Qualitaet zu Alkohol ratio",
+                          style = "background-color: white; font-size: 28px; transparent: false")),
 
   # Layout fuer die Eingaben in die App und die Ausgaben
   sidebarLayout(
@@ -33,7 +25,7 @@ ui=bootstrapPage(
       # Ein Slider fuerr die Qualitaet des Weins
       # der Slider geht hier von 0 (min) bis 10 (max),
       # die Voreinstellung ist 5 (value)
-      sliderInput(inputId = "quality",
+      knobInput(inputId = "quality",
                   label = "Waehlen Sie die Qualitaet (0-10)",
                   min = 0,
                   max = 10,
@@ -125,8 +117,8 @@ server <- function(input, output) {
     abweichungen <- y-predict(modelR,X)$predictions
 
     # Zeichne jetzt im Histogram die Prognose mit den Abweichungen;
-    # dies visualisiert den Gehalt des alkohols im Rotwein.
-    hist(prog+abweichungen, col = "red", main = "Verteilung des alcohol gehalts im Rotwein",xlim=c(0,15))
+    # dies visualisiert den Gehalt des Alkohols im Rotwein.
+    hist(prog+abweichungen, col = "red", main = "Verteilung des Alkoholgehalt im Rotwein",xlim=c(0,15))
 
   })
   
@@ -140,7 +132,7 @@ server <- function(input, output) {
     
     # die Ausgabe ist eine Kombination (mit dem Befehl 'paste') von Text
     # und des errechneten Prognosewerts prog
-    Ausgabe <- paste("Durchschnittlicher Alkohol gehalt in Rotwein: ", prog)
+    Ausgabe <- paste("<font color=\"#FF0000\"><b>","Durchschnittlicher Alkoholgehalt in Rotwein: ", prog, "</b></font>")
   })
   
   # Folgende Funktion berechnet die Prognose fuer die eingegeben Werte
@@ -187,8 +179,8 @@ server <- function(input, output) {
     abweichungen <- y-predict(modelW,X)$predictions
     
     # Zeichne jetzt im Histogram die Prognose mit den Abweichungen;
-    # dies visualisiert den Gehalt des alkohols im Weisswein
-    hist(prog+abweichungen, col = "white", main = "Verteilung des alcohol gehalts im Weisswein",xlim=c(0,15))
+    # dies visualisiert den Gehalt des Alkohols im Weisswein
+    hist(prog+abweichungen, col = "white", main = "Verteilung des Alkoholgehalt im Weisswein",xlim=c(0,15))
     
   })
   
@@ -202,7 +194,7 @@ server <- function(input, output) {
     
     # die Ausgabe ist eine Kombination (mit dem Befehl 'paste') von Text
     # und des errechneten Prognosewerts prog
-    Ausgabe <- paste("<font color=\"#FF0000\"><b>","Durchschnittlicher Alkohol gehalt in Weisswein: ", prog, "</b></font>")
+    Ausgabe <- paste("<font color=\"#FFFFFF\"><b>","Durchschnittlicher Alkoholgehalt in Weisswein: ", prog, "</b></font>")
   })
 
 }

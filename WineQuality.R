@@ -38,12 +38,3 @@ library(shiny)
 library(shinyWidgets)
 
 runApp("App-WeinAlcoholgehalt")
-
-
-
-
-#a <- data.frame(x=c(5,5,5,6,6,6,7,7,7,8,8,8,9,9,9,10,10,10))
-#model <- lm(x ~ y)
-#result <- predict(model,newdata = a, interval = 'confidence')
-#plot(y,x,col = "blue",main ="Qualität & Alcohol Regression", abline(lm(x ~ y)),cex=1.3,pch=16,xlab="Alcohol gehalt",ylab="Quality(0-10)")
-
